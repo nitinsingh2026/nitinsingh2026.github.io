@@ -1,1 +1,307 @@
 
+<!--
+Direct Selling | Nitin Singh 2026
+Single-file professional website (HTML/CSS/JS)
+Theme: Black & Gold (as requested)
+Pages included: Home, About, Contact (with working form validation), Login
+How to use:
+1. Replace the placeholder logo at <img id="logo"> with your logo file or change the src attribute.
+2. To host: save this file as index.html and upload to any static host (GitHub Pages, Netlify, Vercel, your server).
+3. Contact form currently validates input and simulates sending (no backend). To connect a real email endpoint, replace sendForm() in the script with your API call (e.g., Netlify Forms, Formspree, or your server endpoint).
+4. Login page is a demo that uses localStorage for a mock account. Replace with real auth as needed.
+
+Contact details already embedded:
+- Email: nitinkumarsingh4267@gmail.com
+- Phone: +91 9155315808
+
+Enjoy — I can also convert this to a React/Tailwind project or add an online shop later if you want.
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Direct Selling | Nitin Singh 2026</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0b0b; /* near-black */
+      --panel:#0f0f0f;
+      --gold:#c69c3a; /* gold */
+      --muted:#bdbdbd;
+      --accent:rgba(198,156,58,0.12);
+      --glass: rgba(255,255,255,0.03);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,var(--bg),#060606);
+      color:#eee;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+    }
+    .container{max-width:1100px;margin:0 auto;padding:28px}
+
+    /* Header / Nav */
+    header{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:12px}
+    #logo{width:64px;height:64px;object-fit:contain;border-radius:12px;background:linear-gradient(135deg,#111, #1a1a1a);padding:8px}
+    h1.brand-title{font-size:18px;margin:0;color:var(--gold);letter-spacing:0.6px}
+    p.brand-sub{margin:0;font-size:12px;color:var(--muted)}
+
+    nav ul{display:flex;gap:18px;list-style:none;padding:0;margin:0}
+    nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px}
+    nav a.active, nav a:hover{color:#fff;background:var(--glass)}
+    .cta{background:linear-gradient(90deg,var(--gold),#b58a2f);color:#060606;padding:8px 14px;border-radius:10px;font-weight:700;text-decoration:none}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:center;margin-top:28px}
+    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:28px;border-radius:16px;box-shadow:0 6px 30px rgba(0,0,0,0.6);}
+    .hero h2{margin:0;font-size:34px;color:var(--gold)}
+    .hero p{color:var(--muted);margin-top:12px}
+    .hero .actions{margin-top:18px;display:flex;gap:12px}
+
+    /* Info boxes */
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
+    .box{background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);padding:18px;border-radius:12px}
+    .box h3{margin:0;color:var(--gold)}
+    .box p{margin-top:8px;color:var(--muted);font-size:14px}
+
+    /* About */
+    .about{display:flex;gap:18px;margin-top:28px}
+    .about .text{flex:1}
+    .about .badge{background:linear-gradient(90deg,var(--gold),#b58a2f);color:#060606;padding:8px 12px;border-radius:999px;font-weight:700;display:inline-block}
+
+    /* Contact form */
+    form{display:grid;gap:12px}
+    label{font-size:13px;color:var(--muted)}
+    input,textarea{width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff}
+    textarea{min-height:120px;resize:vertical}
+    .muted{color:var(--muted);font-size:13px}
+
+    footer{margin-top:36px;padding:18px 0;border-top:1px solid rgba(255,255,255,0.03);color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+
+    /* Login modal/page */
+    .card{background:linear-gradient(180deg, #0e0e0e, #0b0b0b);padding:18px;border-radius:12px}
+    .login-wrap{max-width:420px;margin:0 auto}
+    .small{font-size:13px}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr;}
+      .grid3{grid-template-columns:repeat(1,1fr)}
+      #logo{width:56px;height:56px}
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <!-- Replace src with your logo path -->
+        <img id="logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><rect rx='16' width='100%' height='100%' fill='%230a0a0a'/><text x='50%' y='54%' fill='%23c69c3a' font-family='Inter, Arial' font-weight='700' font-size='28' text-anchor='middle' dominant-baseline='middle'>NS</text></svg>" alt="Nitin Singh Logo">
+        <div>
+          <h1 class="brand-title">Direct Selling | Nitin Singh 2026</h1>
+          <p class="brand-sub">Professional direct selling & business solutions</p>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#home" class="active" data-link>Home</a></li>
+          <li><a href="#about" data-link>About</a></li>
+          <li><a href="#contact" data-link>Contact</a></li>
+          <li><a href="#login" data-link>Login</a></li>
+          <li><a class="cta" href="#contact" data-link>Get Started</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="home" class="hero-card hero">
+        <div>
+          <h2>Grow your direct selling business with expert guidance</h2>
+          <p>Professional training, authentic products, and a proven system to help you close more sales and scale your team in 2026.</p>
+          <div class="actions">
+            <a class="cta" href="#contact" data-link>Contact Us</a>
+            <a href="#about" style="color:var(--muted);align-self:center;text-decoration:none;padding:8px 12px;border-radius:8px;background:transparent">Learn More</a>
+          </div>
+
+          <div class="grid3" style="margin-top:20px">
+            <div class="box">
+              <h3>Products</h3>
+              <p>High-quality items selected for repeat purchases and strong margins.</p>
+            </div>
+            <div class="box">
+              <h3>Training</h3>
+              <p>Practical sales training & scripts to onboard and scale your distributors.</p>
+            </div>
+            <div class="box">
+              <h3>Support</h3>
+              <p>Ongoing mentorship, sales tracking templates, and business coaching.</p>
+            </div>
+          </div>
+        </div>
+
+        <aside style="width:100%">
+          <div class="card">
+            <h3 style="color:var(--gold);margin:0">Start a conversation</h3>
+            <p class="muted">Reach out now — quick replies during business hours.</p>
+            <p style="margin:6px 0"><strong>Email:</strong> nitinkumarsingh4267@gmail.com</p>
+            <p style="margin:6px 0"><strong>Phone:</strong> +91 9155315808</p>
+            <div style="margin-top:12px">
+              <a class="cta" href="#contact" data-link>Message Us</a>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="about" class="about">
+        <div class="about-left">
+          <span class="badge">Established 2026</span>
+          <div style="height:14px"></div>
+          <div class="hero-card">
+            <h2 style="margin-top:0">About Nitin Singh & Direct Selling</h2>
+            <p class="muted">I (Nitin Singh) help independent sellers build profitable, ethical direct selling businesses with a focus on customer retention and leadership development. We provide product selection, onboarding materials, and hands-on coaching tailored to your goals.</p>
+            <ul style="margin-top:12px;color:var(--muted)">
+              <li>Personalized onboarding</li>
+              <li>Field-tested sales scripts</li>
+              <li>Leadership & team growth coaching</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" style="margin-top:28px">
+        <div class="hero-card">
+          <h2 style="color:var(--gold);margin-top:0">Contact</h2>
+          <p class="muted">Send a message and we will reply to the email you provide.</p>
+          <form id="contactForm" onsubmit="return false;">
+            <div>
+              <label for="name">Your name</label>
+              <input id="name" name="name" placeholder="Full name" required>
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="you@example.com" required>
+            </div>
+            <div>
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" placeholder="+91 9xxxxxxxxx">
+            </div>
+            <div>
+              <label for="message">Message</label>
+              <textarea id="message" name="message" placeholder="How can we help?" required></textarea>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center;margin-top:6px">
+              <button class="cta" onclick="submitContact()">Send Message</button>
+              <div id="contactStatus" class="muted small"></div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="login" style="margin-top:28px">
+        <div class="login-wrap">
+          <div class="hero-card">
+            <h2 style="margin-top:0;color:var(--gold)">Login</h2>
+            <p class="muted">Demo login for distributors. Create a mock account to test.</p>
+            <form id="loginForm" onsubmit="return false;">
+              <label for="userEmail">Email</label>
+              <input id="userEmail" type="email" placeholder="you@example.com" required>
+              <label for="userPass">Password</label>
+              <input id="userPass" type="password" placeholder="Enter password" required>
+              <div style="display:flex;gap:10px;margin-top:12px">
+                <button class="cta" onclick="handleLogin()">Login</button>
+                <button style="background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:8px;color:var(--muted)" onclick="createDemoAccount()">Create Demo</button>
+              </div>
+              <p id="loginStatus" class="muted small" style="margin-top:10px"></p>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <div>© <strong>Nitin Singh</strong> — Direct Selling 2026</div>
+      <div>Contact: nitinkumarsingh4267@gmail.com • +91 9155315808</div>
+    </footer>
+  </div>
+
+  <script>
+    // Simple single-page navigation (hash-based)
+    document.querySelectorAll('[data-link]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        e.preventDefault();
+        const href = a.getAttribute('href');
+        if(href && href.startsWith('#')){
+          location.hash = href;
+          setActiveLink(href);
+        }
+      })
+    });
+    function setActiveLink(hash){
+      document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
+      const el = document.querySelector('nav a[href="'+hash+'"]');
+      if(el) el.classList.add('active');
+    }
+    // on load, respect hash
+    if(location.hash) setActiveLink(location.hash);
+
+    // Contact form handling (simulated)
+    function submitContact(){
+      const form = document.getElementById('contactForm');
+      // Basic validation
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+      const status = document.getElementById('contactStatus');
+      if(!name || !email || !message){
+        status.textContent = 'Please fill required fields.'; return;
+      }
+      status.textContent = 'Sending...';
+      // Simulate network delay
+      setTimeout(()=>{
+        status.textContent = 'Message sent! We will reply at ' + email + '.';
+        form.reset();
+      },900);
+    }
+    // Hook form submit to JS function
+    window.submitContact = submitContact;
+
+    // Simple demo login using localStorage (for demo purposes only)
+    function createDemoAccount(){
+      const demoEmail = 'distributor@example.com';
+      const demoPass = 'demo1234';
+      localStorage.setItem('demo_account', JSON.stringify({email:demoEmail,pass:demoPass}));
+      document.getElementById('loginStatus').textContent = 'Demo account created. Use distributor@example.com / demo1234';
+    }
+    function handleLogin(){
+      const email = document.getElementById('userEmail').value.trim();
+      const pass = document.getElementById('userPass').value.trim();
+      const info = JSON.parse(localStorage.getItem('demo_account') || 'null');
+      const status = document.getElementById('loginStatus');
+      if(!email || !pass){ status.textContent = 'Enter email and password.'; return; }
+      if(info && info.email === email && info.pass === pass){
+        status.textContent = 'Login successful. Welcome, '+email+'!';
+      } else {
+        status.textContent = 'Invalid credentials. Create demo account to test.';
+      }
+    }
+
+    // Small UX: smooth scroll to sections on hash change
+    window.addEventListener('hashchange', ()=>{
+      const id = location.hash.replace('#','');
+      const el = document.getElementById(id);
+      if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+
+  </script>
+</body>
+</html>
